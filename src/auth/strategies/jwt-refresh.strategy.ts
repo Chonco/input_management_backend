@@ -8,20 +8,20 @@ import { JwtPayload } from '../constants/jwt.constants';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
-    Strategy,
-    STRATEGY_JWT_REFRESH
+  Strategy,
+  STRATEGY_JWT_REFRESH,
 ) {
-    constructor(private configService: ConfigService) {
-        super({
-            jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
-            secretOrKey: configService.get('jwt.secret'),
-            algorithms: ['RS256'],
-        });
-    }
+  constructor(private configService: ConfigService) {
+    super({
+      jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
+      secretOrKey: configService.get('jwt.secret'),
+      algorithms: ['RS256'],
+    });
+  }
 
-    async validate(payload: JwtPayload): Promise<UserRefrechTokenClaims> {
-        return {
-            id: payload.sub
-        }
-    }
+  async validate(payload: JwtPayload): Promise<UserRefrechTokenClaims> {
+    return {
+      id: payload.sub,
+    };
+  }
 }

@@ -9,24 +9,24 @@ import { UserAccessTokenClaims } from '../dtos/user-token-claims.dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, STRATEGY_JWT_AUTH) {
-    constructor(
-        private userService: UserService,
-        private configService: ConfigService
-    ) {
-        super({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: configService.get('jwt.secret'),
-            ignoreExpiration: false,
-        });
-    }
+  constructor(
+    private userService: UserService,
+    private configService: ConfigService,
+  ) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: configService.get('jwt.secret'),
+      ignoreExpiration: false,
+    });
+  }
 
-    async validate(payload: JwtPayload): Promise<UserAccessTokenClaims> {
-        const user = await this.userService.getById(payload.sub);
+  async validate(payload: JwtPayload): Promise<UserAccessTokenClaims> {
+    const user = await this.userService.getById(payload.sub);
 
-        return {
-            id: payload.sub,
-            email: payload.username,
-            userType: user.userType
-        }
-    }
+    return {
+      id: payload.sub,
+      email: payload.username,
+      userType: user.userType,
+    };
+  }
 }

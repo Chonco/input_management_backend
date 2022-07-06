@@ -10,10 +10,17 @@ import { OfferModule } from './offer/offer.module';
 import { ReviewModule } from './review/review.module';
 
 @Module({
-  imports: [SharedModule, ConfigModule.forRoot({
-    load: [configuration]
-  }), UserModule, AuthModule, OfferModule, ReviewModule],
+  imports: [
+    SharedModule,
+    ConfigModule.forRoot({
+      load: [configuration],
+    }),
+    UserModule,
+    AuthModule,
+    OfferModule,
+    ReviewModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

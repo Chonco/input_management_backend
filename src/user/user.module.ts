@@ -12,6 +12,6 @@ import { FoodTypeController } from './controllers/food-type.controller';
   imports: [ConfigModule, TypeOrmModule.forFeature([User, FoodType])],
   providers: [UserService, FoodTypeService],
   controllers: [UserController, FoodTypeController],
-  exports: [UserService]
+  exports: [UserService],
 })
-export class UserModule { }
+export class UserModule {}

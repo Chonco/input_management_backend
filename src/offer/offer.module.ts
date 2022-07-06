@@ -16,20 +16,14 @@ import { Order } from './model/order.model';
 @Module({
   imports: [
     UserModule,
-    TypeOrmModule.forFeature(
-      [
-        Offer,
-        OfferImage,
-        OfferCategory,
-        Order
-      ])
+    TypeOrmModule.forFeature([Offer, OfferImage, OfferCategory, Order]),
   ],
   providers: [
     OfferService,
     OfferImagesService,
     OfferCategoriesService,
-    OrderService
+    OrderService,
   ],
-  controllers: [OfferController, OfferCategoriesController, OrderController]
+  controllers: [OfferController, OfferCategoriesController, OrderController],
 })
-export class OfferModule { }
+export class OfferModule {}

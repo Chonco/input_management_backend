@@ -8,6 +8,6 @@ import { UserModule } from '../user/user.module';
 @Module({
   imports: [UserModule, TypeOrmModule.forFeature([Review])],
   controllers: [ReviewController],
-  providers: [ReviewService]
+  providers: [ReviewService],
 })
-export class ReviewModule { }
+export class ReviewModule {}

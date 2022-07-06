@@ -4,11 +4,11 @@ import { FoodTypeService } from '../services/food-type.service';
 
 @Controller('food-type')
 export class FoodTypeController {
-    constructor(private service: FoodTypeService) { }
-    
-    @Get()
-    @HttpCode(HttpStatus.OK) 
-    async getAll(): Promise<FoodType[]> {
-        return await this.service.getAll();
-    }
+  constructor(private service: FoodTypeService) {}
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async getAll(): Promise<FoodType[]> {
+    return await this.service.getAll();
+  }
 }

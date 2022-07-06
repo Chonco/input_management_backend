@@ -8,50 +8,50 @@ import { Review } from '../model/review.model';
 
 @Injectable()
 export class ReviewService {
-    constructor(
-        private dataSource: DataSource,
-        private userService: UserService
-    ) { }
+  constructor(
+    private dataSource: DataSource,
+    private userService: UserService,
+  ) {}
 
-    async add(
-        contextUser: UserAccessTokenClaims,
-        input: ReviewInput
-    ): Promise<ReviewOutput> {
-        const from = await this.userService.getUnformattedUserById(contextUser.id);
-        const to = await this.userService.getUnformattedUserById(input.idTo);
+  async add(
+    contextUser: UserAccessTokenClaims,
+    input: ReviewInput,
+  ): Promise<ReviewOutput> {
+    const from = await this.userService.getUnformattedUserById(contextUser.id);
+    const to = await this.userService.getUnformattedUserById(input.idTo);
 
-        if (from.userType === to.userType) {
-            throw new BadRequestException("Users of same type can't review each other.");
-        }
-
-        const review = ReviewInput.toEntity(input, from, to);
-
-        return await ReviewOutput.fromEntity(
-            await this.dataSource.getRepository(Review).save(review)
-        );
+    if (from.userType === to.userType) {
+      throw new BadRequestException(
+        "Users of same type can't review each other.",
+      );
     }
 
-    async getOfTo(toId: number): Promise<ReviewOutput[]> {
-        const reviews = await this.dataSource
-            .getRepository(Review)
-            .createQueryBuilder('review')
-            .leftJoinAndSelect('review.from', 'from')
-            .innerJoinAndSelect('review.to', 'to', 'to.id = :id', { id: toId })
-            .getMany();
+    const review = ReviewInput.toEntity(input, from, to);
 
-        const parsedReviews: ReviewOutput[] = [];
-        for (let index = 0; index < reviews.length; index++) {
-            const review = reviews[index];
+    return await ReviewOutput.fromEntity(
+      await this.dataSource.getRepository(Review).save(review),
+    );
+  }
 
-            parsedReviews.push(
-                await ReviewOutput.fromEntity(review)
-            );
-        }
+  async getOfTo(toId: number): Promise<ReviewOutput[]> {
+    const reviews = await this.dataSource
+      .getRepository(Review)
+      .createQueryBuilder('review')
+      .leftJoinAndSelect('review.from', 'from')
+      .innerJoinAndSelect('review.to', 'to', 'to.id = :id', { id: toId })
+      .getMany();
 
-        return parsedReviews;
+    const parsedReviews: ReviewOutput[] = [];
+    for (let index = 0; index < reviews.length; index++) {
+      const review = reviews[index];
+
+      parsedReviews.push(await ReviewOutput.fromEntity(review));
     }
 
-    async deleteById(id: number) {
-        await this.dataSource.getRepository(Review).delete(id);
-    }
+    return parsedReviews;
+  }
+
+  async deleteById(id: number) {
+    await this.dataSource.getRepository(Review).delete(id);
+  }
 }

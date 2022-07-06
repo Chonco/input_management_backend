@@ -11,64 +11,61 @@ import { RequestContext } from '../../shared/request-context/request-context.dto
 
 @Injectable()
 export class AuthService {
-    constructor(
-        private userService: UserService,
-        private jwtService: JwtService,
-        private configService: ConfigService
-    ) { }
+  constructor(
+    private userService: UserService,
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
 
-    async validateUser(
-        email: string,
-        password: string
-    ): Promise<UserAccessTokenClaims> {
-        const user = await this.userService.getByEmail(email);
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<UserAccessTokenClaims> {
+    const user = await this.userService.getByEmail(email);
 
-        if (user && compareSync(password, user.password)) {
-            return {
-                id: user.id,
-                email,
-                userType: user.userType
-            }
-        }
-
-        return null;
+    if (user && compareSync(password, user.password)) {
+      return {
+        id: user.id,
+        email,
+        userType: user.userType,
+      };
     }
 
-    async login(context: RequestContext): Promise<AuthTokenOutput> {
-        return this.getAuthToken(context.user);
-    }
+    return null;
+  }
 
-    async refreshToken(
-        context: RequestContext
-    ): Promise<AuthTokenOutput> {
-        const user = await this.userService.getById(context.user.id);
+  async login(context: RequestContext): Promise<AuthTokenOutput> {
+    return this.getAuthToken(context.user);
+  }
 
-        if (!user)
-            throw new UnauthorizedException();
+  async refreshToken(context: RequestContext): Promise<AuthTokenOutput> {
+    const user = await this.userService.getById(context.user.id);
 
-        return this.getAuthToken(user);
-    }
+    if (!user) throw new UnauthorizedException();
 
-    private getAuthToken(
-        user: UserOutputDTO | UserAccessTokenClaims
-    ): AuthTokenOutput {
-        const subject = {
-            sub: user.id
-        }
-        const payload: JwtPayload = {
-            sub: user.id,
-            username: user.email
-        }
+    return this.getAuthToken(user);
+  }
 
-        return {
-            refreshToken: this.jwtService.sign(subject, {
-                expiresIn: `${this.configService.get('jwt.expireTimePublic')}s`
-            }),
-            accessToken: this.jwtService.sign(
-                { ...payload, ...subject },
-                { expiresIn: `${this.configService.get('jwt.expireTimeSecret')}s` }
-            ),
-            userType: user.userType
-        }
-    }
+  private getAuthToken(
+    user: UserOutputDTO | UserAccessTokenClaims,
+  ): AuthTokenOutput {
+    const subject = {
+      sub: user.id,
+    };
+    const payload: JwtPayload = {
+      sub: user.id,
+      username: user.email,
+    };
+
+    return {
+      refreshToken: this.jwtService.sign(subject, {
+        expiresIn: `${this.configService.get('jwt.expireTimePublic')}s`,
+      }),
+      accessToken: this.jwtService.sign(
+        { ...payload, ...subject },
+        { expiresIn: `${this.configService.get('jwt.expireTimeSecret')}s` },
+      ),
+      userType: user.userType,
+    };
+  }
 }

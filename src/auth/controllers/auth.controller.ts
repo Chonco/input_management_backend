@@ -11,26 +11,25 @@ import { RefreshTokenInput } from '../dtos/refresh-token-input.dto';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private service: AuthService) { }
+  constructor(private service: AuthService) {}
 
-    @Post('login')
-    @Public()
-    @UseGuards(LocalAuthGuard)
-    async login(
-        @ReqContext() context: RequestContext,
-        @Body() credentials: LoginCredentials
-    ): Promise<AuthTokenOutput> {
-        return await this.service.login(context);
-    }
+  @Post('login')
+  @Public()
+  @UseGuards(LocalAuthGuard)
+  async login(
+    @ReqContext() context: RequestContext,
+    @Body() credentials: LoginCredentials,
+  ): Promise<AuthTokenOutput> {
+    return await this.service.login(context);
+  }
 
-    @Post('refresh-token')
-    @Public()
-    @UseGuards(JwtRefreshGuard)
-    async refreshToken(
-        @ReqContext() context: RequestContext,
-        @Body() credential: RefreshTokenInput 
-    ): Promise<AuthTokenOutput> {
-        return await this.service.refreshToken(context);
-    }
-
+  @Post('refresh-token')
+  @Public()
+  @UseGuards(JwtRefreshGuard)
+  async refreshToken(
+    @ReqContext() context: RequestContext,
+    @Body() credential: RefreshTokenInput,
+  ): Promise<AuthTokenOutput> {
+    return await this.service.refreshToken(context);
+  }
 }

@@ -3,12 +3,12 @@ import { Offer } from './offer.model';
 
 @Entity()
 export class OfferImage {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    imageData: string;
+  @Column()
+  imageData: string;
 
-    @ManyToOne(() => Offer, offer => offer.images)
-    offer: Offer;
+  @ManyToOne(() => Offer, (offer) => offer.images)
+  offer: Offer;
 }

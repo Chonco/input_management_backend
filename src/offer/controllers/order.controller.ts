@@ -7,14 +7,14 @@ import { Order } from '../model/order.model';
 
 @Controller('order')
 export class OrderController {
-    constructor(private service: OrderService) { }
+  constructor(private service: OrderService) {}
 
-    @Post()
-    @HttpCode(HttpStatus.CREATED)
-    async createOrder(
-        @ReqContext() context: RequestContext,
-        @Body() input: OrderInput
-    ): Promise<Order> {
-        return await this.service.save(context.user, input);
-    }
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async createOrder(
+    @ReqContext() context: RequestContext,
+    @Body() input: OrderInput,
+  ): Promise<Order> {
+    return await this.service.save(context.user, input);
+  }
 }
