@@ -9,21 +9,13 @@ import { UserModule } from '../user/user.module';
 import { OfferImagesService } from './services/offer-images.service';
 import { OfferCategoriesService } from './services/offer-categories.service';
 import { OfferCategoriesController } from './controllers/offer-categories.controller';
-import { OrderController } from './controllers/order.controller';
-import { OrderService } from './services/order.service';
-import { Order } from './model/order.model';
 
 @Module({
   imports: [
     UserModule,
-    TypeOrmModule.forFeature([Offer, OfferImage, OfferCategory, Order]),
+    TypeOrmModule.forFeature([Offer, OfferImage, OfferCategory]),
   ],
-  providers: [
-    OfferService,
-    OfferImagesService,
-    OfferCategoriesService,
-    OrderService,
-  ],
-  controllers: [OfferController, OfferCategoriesController, OrderController],
+  providers: [OfferService, OfferImagesService, OfferCategoriesService],
+  controllers: [OfferController, OfferCategoriesController],
 })
 export class OfferModule {}

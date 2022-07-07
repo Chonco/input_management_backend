@@ -1,7 +1,6 @@
 import {
   ArrayMinSize,
   IsArray,
-  IsDateString,
   IsInt,
   IsNotEmpty,
   IsNumber,
@@ -9,6 +8,10 @@ import {
   IsString,
   Min,
 } from 'class-validator';
+import { Offer } from '../model/offer.model';
+import { OfferCategory } from '../model/offer-category.model';
+import { User } from '../../user/models/user.model';
+import { OfferStatus } from '../constants/OfferStatus.enum';
 
 export class OfferInput {
   @IsNotEmpty()
@@ -17,9 +20,6 @@ export class OfferInput {
   @IsNumber()
   @Min(0.1)
   price: number;
-
-  @IsDateString()
-  productionDate: Date;
 
   @IsArray()
   @IsString({ each: true })
@@ -37,4 +37,23 @@ export class OfferInput {
   @IsInt()
   @IsPositive()
   restaurantId: number;
+
+  static toModel(
+    input: OfferInput,
+    categories: OfferCategory[],
+    seller: User,
+    restaurant: User,
+  ): Offer {
+    const offer = new Offer();
+
+    offer.restaurant = restaurant;
+    offer.seller = seller;
+    offer.name = input.name;
+    offer.price = input.price;
+    offer.description = input.description;
+    offer.categories = categories;
+    offer.status = OfferStatus.OFFERED;
+
+    return offer;
+  }
 }

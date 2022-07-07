@@ -6,13 +6,11 @@ import {
   ManyToMany,
   JoinTable,
   ManyToOne,
-  OneToOne,
 } from 'typeorm';
 import { OfferImage } from './offer-images.model';
 import { OfferCategory } from './offer-category.model';
 import { User } from '../../user/models/user.model';
 import { Index } from 'typeorm';
-import { Order } from './order.model';
 import { OfferStatus } from '../constants/OfferStatus.enum';
 
 @Entity()
@@ -33,9 +31,6 @@ export class Offer {
   @Column('double')
   price: number;
 
-  @Column()
-  productionDate: Date;
-
   @OneToMany(() => OfferImage, (image) => image.offer, { eager: true })
   images: OfferImage[];
 
@@ -43,12 +38,9 @@ export class Offer {
   @JoinTable()
   categories: OfferCategory[];
 
-  @Column()
+  @Column({ type: 'mediumtext' })
   description: string;
 
   @Column({ type: 'enum', enum: OfferStatus })
   status: OfferStatus;
-
-  @OneToOne(() => Order, (order) => order.offer, { nullable: true })
-  order: Order;
 }

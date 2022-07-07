@@ -1,13 +1,4 @@
-import {
-  ArrayNotEmpty,
-  IsBoolean,
-  IsEnum,
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Min,
-} from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
 import { OfferStatus } from '../constants/OfferStatus.enum';
 
 export class OfferSearchInput {

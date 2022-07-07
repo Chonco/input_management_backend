@@ -45,15 +45,12 @@ export class OfferService {
       input.categories,
     );
 
-    const offer = new Offer();
-    offer.restaurant = restaurant;
-    offer.seller = seller;
-    offer.name = input.name;
-    offer.price = input.price;
-    offer.productionDate = input.productionDate;
-    offer.description = input.description;
-    offer.categories = offerCategories;
-    offer.status = OfferStatus.OFFERED;
+    const offer = OfferInput.toModel(
+      input,
+      offerCategories,
+      seller,
+      restaurant,
+    );
 
     const offerSaved = await this.dataSource.getRepository(Offer).save(offer);
 
@@ -111,8 +108,6 @@ export class OfferService {
       .leftJoinAndSelect('offer.seller', 'seller')
       .leftJoinAndSelect('offer.categories', 'category')
       .leftJoinAndSelect('offer.images', 'image')
-      .leftJoinAndSelect('offer.characteristics', 'characteristic')
-      .leftJoinAndSelect('offer.order', 'order')
       .where(`(offer.name LIKE :offerName AND seller.name LIKE :sellerName)`, {
         offerName: `%${searchCriteria.name}%`,
         sellerName: `%${searchCriteria.sellerName}%`,
@@ -151,8 +146,6 @@ export class OfferService {
       })
       .leftJoinAndSelect('offer.categories', 'category')
       .leftJoinAndSelect('offer.images', 'images')
-      .leftJoinAndSelect('offer.characteristics', 'characteristics')
-      .leftJoinAndSelect('offer.order', 'order')
       .where(
         `(offer.name LIKE :offerName AND restaurant.name LIKE :restaurantName)`,
         {
