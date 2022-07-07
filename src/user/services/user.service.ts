@@ -65,8 +65,8 @@ export class UserService {
     const parsed = await UserInputDTO.toEntity(input);
 
     if (parsed.userType == UserTypeEnum.RESTAURANT) {
-      parsed.foodType = Promise.resolve(
-        await this.foodTypeService.getOrCreate(input.foodType),
+      parsed.foodTypes = Promise.resolve(
+        await this.foodTypeService.getOrCreate(input.foodTypes),
       );
     }
 

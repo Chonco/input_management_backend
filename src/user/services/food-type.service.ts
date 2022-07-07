@@ -10,18 +10,26 @@ export class FoodTypeService {
     return await this.dataSource.getRepository(FoodType).find();
   }
 
-  async getOrCreate(name: string) {
-    const foodType = await this.dataSource
-      .getRepository(FoodType)
-      .findOneBy({ name });
+  async getOrCreate(names: string[]) {
+    const foodTypes: FoodType[] = null;
 
-    if (!foodType) {
-      const savedFoodType = new FoodType();
-      savedFoodType.name = name;
+    for (let index = 0; index < names.length; index++) {
+      const name = names[index];
+      const foodType = await this.dataSource
+        .getRepository(FoodType)
+        .findOneBy({ name });
 
-      return await this.dataSource.getRepository(FoodType).save(savedFoodType);
+      if (!foodType) {
+        const savedFoodType = new FoodType();
+        savedFoodType.name = name;
+        foodTypes.push(
+          await this.dataSource.getRepository(FoodType).save(savedFoodType),
+        );
+      } else {
+        foodTypes.push(foodType);
+      }
     }
 
-    return foodType;
+    return foodTypes;
   }
 }
