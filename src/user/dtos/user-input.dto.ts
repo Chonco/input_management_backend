@@ -1,7 +1,9 @@
 import {
+  ArrayNotEmpty,
   IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsString,
   Length,
   MinLength,
   ValidateIf,
@@ -34,8 +36,9 @@ export class UserInputDTO {
   @ValidateIf(
     (input: UserInputDTO) => input.userType == UserTypeEnum.RESTAURANT,
   )
-  @IsNotEmpty()
-  foodType: string;
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  foodTypes: string[];
 
   static async toEntity(userDTO: UserInputDTO): Promise<User> {
     const user = new User();
