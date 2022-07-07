@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   Index,
-  OneToMany,
+  ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.model';
@@ -16,6 +16,6 @@ export class FoodType {
   @Column({ unique: true })
   name: string;
 
-  @OneToMany(() => User, (user) => user.foodType)
+  @ManyToMany(() => User, (user) => user.foodTypes)
   users: Promise<User[]>;
 }

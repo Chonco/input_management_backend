@@ -2,7 +2,8 @@ import {
   Column,
   Entity,
   Index,
-  ManyToOne,
+  JoinColumn,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -38,8 +39,9 @@ export class User {
   @Column({ type: 'enum', enum: UserTypeEnum })
   userType: UserTypeEnum;
 
-  @ManyToOne(() => FoodType, (foodType) => foodType.users, { nullable: true })
-  foodType: Promise<FoodType>;
+  @ManyToMany(() => FoodType, (foodType) => foodType.users, { nullable: true })
+  @JoinColumn()
+  foodTypes: Promise<FoodType[]>;
 
   @OneToMany(() => Offer, (offer) => offer.restaurant)
   incomingOffer: Offer;

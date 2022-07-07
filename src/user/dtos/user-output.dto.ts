@@ -9,7 +9,7 @@ export class UserOutputDTO {
   email: string;
   phone: string;
   userType: UserTypeEnum;
-  foodType?: string;
+  foodTypes?: string[];
 
   static async fromUser(user: User): Promise<UserOutputDTO> {
     const dto = new UserOutputDTO();
@@ -23,8 +23,8 @@ export class UserOutputDTO {
     dto.userType = user.userType;
 
     if (dto.userType == UserTypeEnum.RESTAURANT) {
-      const foodType = await user.foodType;
-      dto.foodType = foodType.name;
+      const foodTypes = await user.foodTypes;
+      dto.foodTypes = foodTypes.map<string>((foodType) => foodType.name);
     }
 
     return dto;
